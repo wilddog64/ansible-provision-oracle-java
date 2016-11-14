@@ -4,3 +4,27 @@
   command: test test -x /usr/bin/java
   ignore_errors: yes
   register: java_present
+  become: yes
+  tags:
+    -java
+
+- name: Java - Add apt repository
+  apt_repository: repo='ppa:webupd8team/java'
+  when: java_present | failed
+  become: yes
+  tags:
+    -java
+
+- name: Java | Accept Oracle license before an installation
+  command: echo "oracle-java{{ java_version }}-installer shared/accepted-oracle-license-v1-1 select true" | /usr/bin/debconf-set-selections
+  when: java_present | failed
+  become: yes
+  tags:
+    -java
+
+- name Java | Install
+  apt: update-cache=yes force=yes state=present pkg="oracle-java{{java_version}}-installer"
+  when: java_present | fail
+  become: yes
+  tags:
+    -java
