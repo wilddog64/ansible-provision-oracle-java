@@ -19,5 +19,5 @@
   apt:
     update-cache: yes
     force: yes
-    state: present
+    state: installed
     pkg: "oracle-java{{java_version}}-installer"
