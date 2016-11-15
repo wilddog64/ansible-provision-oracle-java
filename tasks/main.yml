@@ -17,7 +17,6 @@
 - name: Java | Accept Oracle license before an installation
   shell: echo "oracle-java{{ java_version }}-installer shared/accepted-oracle-license-v1-1 select true" | /usr/bin/debconf-set-selections
   when: java_present | failed
-  become: yes
 
 - name: Java | Install
   apt:
