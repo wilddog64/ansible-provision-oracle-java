@@ -23,7 +23,7 @@
     -java
 
 - name Java | Install
-  apt: update-cache=yes force=yes state=present pkg="oracle-java{{java_version}}-installer"
+  apt: update-cache=yes force=yes state=present pkg=oracle-java{{java_version}}-installer
   when: java_present | fail
   become: yes
   tags:
