@@ -8,6 +8,9 @@
   tags:
     -java
 
+- name: Java - debug output
+  debug: var=java_present
+
 - name: Java - Add apt repository
   apt_repository: repo='ppa:webupd8team/java'
   when: java_present | failed
