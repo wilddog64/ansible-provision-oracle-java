@@ -4,7 +4,6 @@
   shell: test -x /usr/bin/java
   ignore_errors: yes
   register: java_present
-  become: yes
 
 - name: Java - debug output
   debug: var=java_present
@@ -12,7 +11,6 @@
 - name: Java - Add apt repository
   apt_repository: repo='ppa:webupd8team/java'
   when: java_present | failed
-  become: yes
 
 - name: Java | Accept Oracle license before an installation
   shell: echo "oracle-java{{ java_version }}-installer shared/accepted-oracle-license-v1-1 select true" | /usr/bin/debconf-set-selections
@@ -24,4 +22,3 @@
     force: yes
     state: present
     pkg: "oracle-java{{java_version}}-installer"
-    become: yes
