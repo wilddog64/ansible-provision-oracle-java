@@ -1,8 +1,7 @@
 ---
 # tasks file for ansible-java
 - name: Java - check if it is present
-  shell: test -x /usr/bin/java
-  ignore_errors: yes
+  stat: path=/usr/bin/java
   register: java_present
 
 - name: Java - debug output
@@ -13,7 +12,7 @@
 
 - name: Java | Accept Oracle license before an installation
   shell: echo "oracle-java{{ java_version }}-installer shared/accepted-oracle-license-v1-1 select true" | /usr/bin/debconf-set-selections
-  when: java_present | failed
+  when: java_present.stat.exists == False
 
 - name: Java | Install
   apt:
@@ -21,4 +20,4 @@
     force: yes
     state: present
     pkg: "oracle-java{{java_version}}-installer"
-  when: java_present | failed
+  when: java_present.stat.exists == False
