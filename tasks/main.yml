@@ -25,5 +25,4 @@
     force: yes
     state: present
     pkg: "oracle-java{{java_version}}-installer"
-    when: java_present | fail
     become: yes
