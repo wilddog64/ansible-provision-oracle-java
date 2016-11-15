@@ -1,7 +1,7 @@
 ---
 # tasks file for ansible-java
 - name: Java - check if it is present
-  command: test test -x /usr/bin/java
+  command: test -x /usr/bin/java
   ignore_errors: yes
   register: java_present
   become: yes
