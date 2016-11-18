@@ -1,3 +1,4 @@
 ---
 # tasks file for ansible-java
+- include_vars: "{{ ansible_os_family }}.yml"
 - include: "tasks/install-{{ ansible_os_family }}-java.yml"
