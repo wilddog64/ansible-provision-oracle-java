@@ -1,0 +1,7 @@
+---
+- name: uninstall messy jdks in the system
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - sun-javadb
