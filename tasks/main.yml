@@ -4,9 +4,6 @@
   stat: path=/usr/bin/java
   register: java_present
 
-- name: debug output
-  debug: var=java_present
-
 - name: add apt repository
   apt_repository: repo='ppa:webupd8team/java' state=present
 
