@@ -1,1 +1,31 @@
 ---
+- set_fact:
+    oracle_java_home: "/usr/java/jdk1.{{ oracle_java_version }}.0_{{ oracle_java_version_update }}"
+    oracle_java_os_supported: yes
+    oracle_java_rpm_filename: "jdk-{{ oracle_java_version }}u{{ oracle_java_version_update }}-linux-x64.rpm"
+    oracle_java_rpm_url: "http://download.oracle.com/otn-pub/java/jdk/{{ oracle_java_version }}u{{ oracle_java_version_update }}-b{{ oracle_java_version_build }}/{{ oracle_java_rpm_filename }}"
+
+- name: download java rpm
+  uri:
+    url: "{{ oracle_rpm_url }}"
+    method: GET
+    HEADER_Content_-Type: Cookie:oraclelicense=accept-securebackup-cookie
+    dest: "/tmp/{{ oracle_java_rpm_filename }}"
+    creates: "/tmp/{{ oracle_java_rpm_filename }}"
+  register: java_rpm
+
+- name: install java rpm
+  yum:
+    name: "/tmp/{{ oracle_java_rpm_filename }}"
+    state: present
+  when: java_rpm
+
+- name: set oracle as a default
+  alternatives:
+    name: "{{ item }}"
+    link: "/usr/bin/{{ item }}"
+  with_items:
+    - { path: "{{ oracle_java_home }}/jre/bin", item: 'java' }
+    - { path: "{{ oracle_java_home }}/jre/bin", item: 'keytool' }
+    - { path: "{{ oracle_java_home }}/bin", item: 'javac' }
+    - { path: "{{ oracle_java_home }}/bin", item: 'java' }
