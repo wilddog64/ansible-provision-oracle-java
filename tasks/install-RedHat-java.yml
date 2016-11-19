@@ -28,10 +28,11 @@
 
 - name: set oracle as a default
   alternatives:
-    name: "{{ item }}"
-    link: "/usr/bin/{{ item }}"
+    name: "{{ item.bin }}"
+    link: "/usr/bin/{{ item.bin }}"
+    path: "{{ item.path }}/{{ item.bin }}"
   with_items:
-    - { path: "{{ oracle_java_home }}/jre/bin", item: 'java' }
-    - { path: "{{ oracle_java_home }}/jre/bin", item: 'keytool' }
-    - { path: "{{ oracle_java_home }}/bin", item: 'javac' }
-    - { path: "{{ oracle_java_home }}/bin", item: 'java' }
+    - { path: "{{ oracle_java_home }}/jre/bin", bin: 'java' }
+    - { path: "{{ oracle_java_home }}/jre/bin", bin: 'keytool' }
+    - { path: "{{ oracle_java_home }}/bin", bin: 'javac' }
+    - { path: "{{ oracle_java_home }}/bin", bin: 'java' }
