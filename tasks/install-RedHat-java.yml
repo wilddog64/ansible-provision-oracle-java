@@ -17,7 +17,7 @@
   shell:
     "curl -L  -H 'Cookie:oraclelicense=accept-securebackup-cookie' -o {{ oracle_java_dir_source }}/{{ oracle_java_rpm_filename }} {{ oracle_java_rpm_url }}"
   args:
-    creates: "{{ oracle_java_dir_source }}/{{ oracle_java_rpm_filename }}"
+    creates: "tmp/{{ oracle_java_rpm_filename }}"
   register: java_rpm
 
 - name: install java rpm
