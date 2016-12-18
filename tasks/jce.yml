@@ -1,20 +1,31 @@
 ---
+- name: create jce path
+  set_fact:
+    jce_location: "{{ oracle_jce_home }}-{{ oracle_java_version }}"
+
 - name: create jce home
   file:
-    path: "{{ oracle_jce_home }}"
+    path: "{{ jce_location }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
 
 - name: download oracle_jce
-  command: curl -L -H 'Cookie:oraclelicense=accept-securebackup-cookie' -o /tmp/jce-{{ java-version }}.zip {{ oracle_jce_url }}
+  command: curl -L -H 'Cookie:oraclelicense=accept-securebackup-cookie' -o /tmp/jce-{{ oracle_java_version }}.zip {{ oracle_jce_url }}
   args:
-    creates: /tmp/jce-{{ java-version }}.zip
+    creates: /tmp/jce-{{ oracle_java_version }}.zip
 
 - name: extract jce zip file
-  unarchive:
-    src: /tmp/jce-{{ java-version }}.zip
-    dest: "{{ oracle_jce_home }}"
-    copy: no
- 
+  command: unzip -j /tmp/jce-{{ oracle_java_version }}.zip -d {{ jce_location }}
+  args:
+    creates: "{{ jce_location }}/local_policy.jar"
+
+- name: set jar file permissions
+  file:
+    path: "{{ jce_location }}/{{ item }}"
+    state: touch
+    mode: "0755"
+  with_items:
+    - local_policy.jar
+    - US_export_policy.jar
