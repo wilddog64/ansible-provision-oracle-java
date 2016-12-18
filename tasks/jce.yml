@@ -1,0 +1,20 @@
+---
+- name: create jce home
+  file:
+    path: "{{ oracle_jce_home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: download oracle_jce
+  command: curl -L -H 'Cookie:oraclelicense=accept-securebackup-cookie' -o /tmp/jce-{{ java-version }}.zip {{ oracle_jce_url }}
+  args:
+    creates: /tmp/jce-{{ java-version }}.zip
+
+- name: extract jce zip file
+  unarchive:
+    src: /tmp/jce-{{ java-version }}.zip
+    dest: "{{ oracle_jce_home }}"
+    copy: no
+ 
