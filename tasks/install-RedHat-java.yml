@@ -8,10 +8,13 @@
 #     dest: "/tmp/{{ oracle_java_rpm_filename }}"
 #     creates: "/tmp/{{ oracle_java_rpm_filename }}"
 #   register: java_rpm
-- name: install curl
+- name: install curl and unzip
   yum:
-    name: curl
+    name: "{{ item }}"
     state: installed
+  with_items:
+    - curl
+    - unzip
 
 - name: check oracle java rpm file exists or not
   stat:
