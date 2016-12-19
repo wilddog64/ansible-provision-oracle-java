@@ -8,6 +8,16 @@
 #     dest: "/tmp/{{ oracle_java_rpm_filename }}"
 #     creates: "/tmp/{{ oracle_java_rpm_filename }}"
 #   register: java_rpm
+
+- name: construct oracle home path
+  set_fact:
+    oracle_java_home: "/usr/java/jdk1.{{ oracle_java_version }}.0_{{ oracle_java_version_update }}"
+    oracle_java_rpm_filename: "jdk-{{ oracle_java_version }}u{{ oracle_java_version_update }}-linux-x64.rpm"
+
+- name: construct oracle rpm url
+  set_fact:
+    oracle_java_rpm_url: "http://download.oracle.com/otn-pub/java/jdk/{{ oracle_java_version }}u{{ oracle_java_version_update }}-b{{ oracle_java_version_build }}/{{ oracle_java_rpm_filename }}"
+
 - name: install curl and unzip
   yum:
     name: "{{ item }}"
@@ -33,6 +43,7 @@
   yum:
     name: "/tmp/{{ oracle_java_rpm_filename }}"
     state: present
+  register: java_state
   when: java_rpm
 
 - name: set oracle as a default
@@ -40,6 +51,7 @@
     name: "{{ item.bin }}"
     link: "/usr/bin/{{ item.bin }}"
     path: "{{ item.path }}/{{ item.bin }}"
+  when: java_state.changed
   with_items:
     - { path: "{{ oracle_java_home }}/jre/bin", bin: 'java' }
     - { path: "{{ oracle_java_home }}/jre/bin", bin: 'keytool' }
