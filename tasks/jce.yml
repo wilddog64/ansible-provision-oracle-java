@@ -24,7 +24,7 @@
 - name: set jar file permissions
   file:
     path: "{{ jce_location }}/{{ item }}"
-    state: touch
+    state: file
     mode: "0755"
   with_items:
     - local_policy.jar
